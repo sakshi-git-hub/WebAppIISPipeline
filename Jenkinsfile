@@ -27,10 +27,19 @@ stage('Publish') {
 			}
 		}
 
-
-
- }
-
-
-
+stage("Deployment") {
+            steps {
+                              bat '''
+                        if exist "C:\\inetpub\\wwwroot\\WebAppIISPipe" rmdir /q /s "C:\\inetpub\\wwwroot\\WebAppIISPipe"
+                        mkdir "C:\\inetpub\\wwwroot\\WebApp"
+                    '''
+                bat "C:\\Windows\\System32\\xcopy.exe /E /Y /I publish\\* C:\\inetpub\\wwwroot\\WebAppIISPipe\\"
+            }
+        }
+    }
+    post {
+        success {
+            echo "Build, Test, Publish Stages Completed Successfully."
+        }
+    }
 }
